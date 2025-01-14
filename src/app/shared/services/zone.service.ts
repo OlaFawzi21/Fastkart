@@ -40,7 +40,7 @@ export class ZoneService {
 
 
   getPlaceName(lat: number, lng: number): Observable<string> {
-    const url = `${this.geocodeAPI}?latlng=${lat},${lng}&key=${'YOUR_GOOGLE_MAP_API_KEY'}`;
+    const url = `${this.geocodeAPI}?latlng=${lat},${lng}&key=${'AIzaSyAaWgMRrsI509HvDzIcWAXYt_YY7mIbKp8'}`;
 
     return this.http.get<any>(url).pipe(
       map((response) => {

@@ -1,0 +1,102 @@
+<section class="pt-0">
+   <div class="container-fluid-lg">
+      <div class="row">
+         <div class="col-12">
+            <div class="slider-3-product product-wrapper position-relative">
+               <div class="product-label-group">
+                  @if(product && product.is_sale_enable){
+                     <div class="product-label-tag">
+                        <span>{{ 'sale' | translate }}</span>
+                     </div>
+                  }@else {
+                     @if(product && product.is_featured){
+                        <div class="product-label-tag warning-label-tag"><span>{{ 'featured' | translate }}</span>
+                        </div>
+                     }
+                  }
+               </div>
+               <owl-carousel-o [options]="productSliderLayout" #owlCar>
+                  @if(product && product.product_galleries?.length){
+                     @for(image of product.product_galleries; track image; let i = $index){
+                        <ng-template carouselSlide [id]="image.id.toString()">
+                           <div>
+                              <div class="product-slider-image {{image.id}}">
+                                 @if(videType.includes(image.mime_type)){
+                                    <i class="ri-video-line" (click)="VideoPlayModal.openModal(image!, 'video')"></i>
+                                    <video class="w-100">
+                                       <source [src]="image ? image.original_url : ''" [type]="image.mime_type">
+                                    </video>
+                                 }@else if (audioType.includes(image.mime_type)) {
+                                    <div class="slider-main-img">
+                                       <audio controls>
+                                          <source [src]="image ? image.original_url : ''" [type]="image.mime_type">
+                                       </audio>
+                                    </div>
+                                 }@else {
+                                    <img [src]="image ? image.original_url : 'assets/images/product.png'" class="img-fluid" [alt]="product.name">
+                                 }
+                              </div>
+                           </div>
+                        </ng-template>
+                     }
+                  }@else {
+                     <ng-template carouselSlide [id]="'1'">
+                        <div>
+                           <div class="product-slider-image">
+                              @if(videType.includes(product.product_thumbnail?.mime_type!)){
+                                 <i class="ri-video-line" (click)="VideoPlayModal.openModal(product.product_thumbnail!, 'video')"></i>
+                                 <video class="w-100">
+                                    <source [src]="product.product_thumbnail ? product.product_thumbnail.original_url : ''" [type]="product.product_thumbnail?.mime_type">
+                                 </video>
+                              }@else if (audioType.includes(product.product_thumbnail?.mime_type!)) {
+                                 <audio controls>
+                                    <source [src]="product.product_thumbnail ? product.product_thumbnail.original_url : ''" [type]="product.product_thumbnail?.mime_type">
+                                 </audio>
+                              }@else {
+                                 <img [src]="product.product_thumbnail ? product.product_thumbnail.original_url : 'assets/images/product.png'" class="img-fluid" [alt]="product.name">
+                              }
+                           </div>
+                        </div>
+                     </ng-template>
+                  }
+               </owl-carousel-o>
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
+<section class="product-section">
+   <div class="container-fluid-lg">
+      <div class="row">
+         <div class="col-xxl-9 col-xl-8 col-lg-7">
+            <div class="row g-4">
+               <div class="col-12">
+                  <div class="right-box-contain full-width-right-box">
+                     <app-product-contain [product]="product" [option]="option"></app-product-contain>
+                     <app-product-action [product]="product"></app-product-action>
+                     <app-product-information [product]="product"></app-product-information>
+                     <app-product-delivery-information [product]="product"></app-product-delivery-information>
+                     <app-payment-option [product]="product" [option]="option"></app-payment-option>
+                     <app-product-social-share [product]="product" [option]="option"></app-product-social-share>
+                  </div>
+               </div>
+                
+               @if(product && product.cross_sell_products && product.cross_sell_products.length){
+                  <div class="col-12 related-product-2">
+                     <app-product-bundle [product]="product"></app-product-bundle>
+                  </div>
+               }
+
+               <div class="col-12">
+                  <app-product-details-tabs [product]="product"></app-product-details-tabs>
+               </div>
+            </div>
+         </div>
+         <div class="col-xxl-3 col-xl-4 col-lg-5 d-none d-lg-block">
+            <app-product-details-sidebar [product]="product"></app-product-details-sidebar>
+         </div>
+      </div>
+   </div>
+</section>
+
+<app-video-play-modal #videoPlayModal></app-video-play-modal>

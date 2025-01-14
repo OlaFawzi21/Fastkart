@@ -1,0 +1,81 @@
+@if(isOpenResult){
+   <div class="search-suggestion-box">
+      <div [class]="(categories.length || categoryService.searchSkeleton)! ? 'recent-search-section mt-0 mb-4' : 'recent-search-section'">
+         @if(!categoryService.searchSkeleton && categories && categories.length){
+            <h4 class="page-title">{{ 'related_categories'  | translate}}</h4>
+            <div class="filter-row">
+
+               @if(!selectedCategory){
+                  @for(category of categories; track category){
+                     <a [routerLink]="['/category', category.slug]">{{ category.name }}</a>
+                  }
+               }@else {
+                  <div *ngTemplateOutlet="recursiveCategory; context: { $implicit: categories }"></div>
+                  <ng-template #recursiveCategory let-categories>
+                     @for(category of categories; track category){
+                        <a [routerLink]="['/category', category.slug]">{{ category.name }}</a>
+                        <ng-container *ngTemplateOutlet="recursiveCategory; context: { $implicit: category.subcategories }"></ng-container>
+                     }
+                  </ng-template>
+               }
+            </div>
+         }
+
+         <!-- skeleton loader -->
+         @if(categoryService.searchSkeleton){
+            <div class="filter-row filter-skeleton">
+               @for(item of skeleton; track item){
+                  <div class="skeleton__p" ></div>
+               }
+            </div>
+         }
+      </div>
+      <div class="recent-search-section">
+         <h4 class="page-title">{{ 'related_product' | translate }} <a [routerLink]="['/search']" [queryParams]="{'search': term}">{{ 'see_all' | translate }}</a></h4>
+         <!-- skeleton loader -->
+
+         @if(productService.searchSkeleton){
+            <ul class="skeleton-ul">
+               @for(item of skeleton; track item){
+                  <li class="result-item">
+                     <div class="suggestion-image"></div>
+                     <div class="suggestion-category">
+                        <div class="skeleton-img"></div>
+                        <div>
+                           <p></p>
+                           <p></p>
+                        </div>
+                     </div>
+                  </li>
+               }
+            </ul>
+         }
+
+         @if(!productService.searchSkeleton){
+            <ul>
+               @for(item of products; track item; let i = $index){
+                  <li class="result-item" [class.selected]="i === selectedResultIndex" tabindex="0">
+                     <div class="suggestion-image">
+                        <img [src]="item.product_thumbnail ? item.product_thumbnail.original_url : 'assets/images/product.png'" alt="">
+                     </div>
+                     <div class="suggestion-category">
+                        <a [routerLink]="['/product/', item?.slug]" [innerHTML]="item.name | highlighter:term:'partial'"></a>
+                        <div>
+                           @for(category of item.categories; track category){
+                              <p [routerLink]="['/collections']" [queryParams]="{ category:category.slug}">{{category.name}}</p>
+                           }
+                        </div>
+                     </div>
+                  </li>
+               }
+            </ul>
+         }
+      </div>
+
+      @if(!products.length){
+         <div class="not-found-box">
+            <h5>{{ 'no_results_for' | translate }} <span>"{{ term }}"</span></h5>
+         </div>
+      }
+   </div>
+}

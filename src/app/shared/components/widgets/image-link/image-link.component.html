@@ -1,0 +1,37 @@
+@if(image?.redirect_link?.link_type === 'external_url'){
+   <a href="{{ image?.redirect_link?.link }}" target="_blank" class="banner-contain d-block h-100">
+      @if(bgImage){
+         <div class="h-100 bg-size" [ngClass]="class" [ngStyle]="{'background-image': 'url(' + storageURL + image?.image_url + ')'}"></div>
+      }@else {
+         <img [src]="storageURL + image?.image_url" class="h-100 bg-img w-100" alt="banner">
+      }
+   </a>
+}
+
+@else if (image?.redirect_link?.link_type === 'collection') {
+   <a [routerLink]="['/category', image?.redirect_link?.link]">
+      @if(bgImage){
+         <div class="h-100 bg-size" [ngClass]="class" [ngStyle]="{'background-image': 'url(' + storageURL + image?.image_url + ')'}"></div>
+      }@else {
+         <img [src]="storageURL + image?.image_url" class="h-100 bg-img w-100" alt="banner">
+      }
+   </a>
+}
+
+@else if (image?.redirect_link?.link_type === 'product') {
+   <a [routerLink]="['/product/', getProductSlug(image?.redirect_link?.link, (product$ | async)?.data!)]">
+      @if(bgImage){
+         <div class="h-100 bg-size" [ngClass]="class" [ngStyle]="{'background-image': 'url(' + storageURL + image?.image_url + ')'}"></div>
+      }@else {
+         <img [src]="storageURL + image?.image_url" class="h-100 bg-img w-100" alt="banner">
+      }
+   </a>
+}
+
+@else {
+   @if(bgImage){
+      <div class="h-100 bg-size" [ngClass]="class" [ngStyle]="{'background-image': 'url(' + storageURL + image?.image_url + ')'}"></div>
+   }@else {
+      <img [src]="storageURL + image?.image_url" class="h-100 bg-img w-100" alt="banner">
+   }
+}

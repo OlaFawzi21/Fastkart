@@ -1,0 +1,44 @@
+<div class="slider-3-blog ratio_65 no-arrow product-wrapper">
+   <owl-carousel-o [options]="sliderOption ? sliderOption : blogOption ">
+      @if(blogService.skeletonLoader){
+         @for(item of skeletonItems; track item){
+            <ng-template carouselSlide>
+               <app-skeleton-blog></app-skeleton-blog>
+            </ng-template>
+         }
+      }@else {
+         @for(blog of blogs; track blog){
+            <ng-template carouselSlide>
+               <div>
+                  <div class="blog-box ratio_65" [class.sticky-blog-box]="blog?.is_sticky === 1">
+
+                     @if(blog?.is_featured){
+                        <div class="blog-label-tag">
+                           <span>{{ 'Featured' | translate }}</span>
+                        </div>
+                     }
+                     <div class="blog-box-image">
+                        <a [routerLink]="['/blog/', blog?.slug]" class="blog-image bg-size" [ngStyle]="{'background-image': 'url(' + (blog.blog_thumbnail ? blog?.blog_thumbnail?.original_url : 'assets/images/product.png') + ')'}">
+                        </a>
+                     </div>
+                     <a [routerLink]="['/blog/', blog?.slug]" class="blog-detail">
+                        <h6>{{ blog?.created_at | date: 'dd MMM yyyy hh:mm:a' }}</h6>
+                        <h5>{{ blog?.title }}</h5>
+                     </a>
+
+                     @if(description){
+                        <p [innerHTML]="blog?.description"></p>
+                     }
+                  </div>
+               </div>
+            </ng-template>
+         }
+      }
+   </owl-carousel-o>
+</div>
+<!-- No Data -->
+
+@if(!(blogs && blogs.length)){
+   <app-no-data [class]="'no-data-added bg-light'" [text]="'no_blog_found'">
+   </app-no-data>
+}

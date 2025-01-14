@@ -1,0 +1,38 @@
+<app-breadcrumb [breadcrumb]="breadcrumb"></app-breadcrumb>
+<section class="wishlist-section section-b-space">
+   <div class="container-fluid-lg">
+
+      @if(wishlistService.skeletonLoader){
+         <div class="row g-sm-3 g-2">
+            @for(item of skeletonItems; track item){
+               <div class="col-xxl-2 col-lg-3 col-md-4 col-6 product-box-contain">
+                  <app-skeleton-product-box></app-skeleton-product-box>
+               </div>
+            }
+         </div>
+      }@else {
+         <div class="row g-sm-3 g-2" [ngClass]="{ 
+          'product_border': (themeOption$ | async)?.product?.full_border || (themeOption$ |
+          async)?.product?.product_box_border,
+          'product_img_bg': (themeOption$ | async)?.product?.image_bg,
+          'full_bg': (themeOption$ | async)?.product?.product_box_bg }">
+
+          @for(product of (wishlistItems$ | async)?.data; track product){
+             <div class="col-xxl-2 col-lg-3 col-md-4 col-6 product-box-contain">
+                <app-product-box [product]="product" [close]="true" [class]="'product-box-3'" [style]="'horizontal'">
+                </app-product-box>
+             </div>
+          }
+         </div>
+      }
+
+      @if(!(wishlistItems$ | async)?.data?.length && !wishlistService.skeletonLoader){
+         <app-no-data 
+            [class]="'no-data-added'" 
+            [image]="'assets/svg/empty-items.svg'" 
+            [text]="'no_items_added'" 
+            [description]="'appears_nothing_added_wishlist_explore_categories'">
+         </app-no-data>
+      }
+   </div>
+</section>

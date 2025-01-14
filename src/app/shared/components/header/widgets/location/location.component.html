@@ -1,0 +1,44 @@
+@if(is_zone) {
+  <li class="right-nav-list location-dropdown" [class.show]="!is_zone_selected || zone_toggle" (click)="zone_toggle = !zone_toggle">
+    <app-button [class]="'btn location-button'" [id]="'location_btn'" [spinner]="false" >
+      <i class="ri-map-pin-line"></i> {{ 'location' | translate }}</app-button>
+    
+    <div class="location-main-box">
+      <div class="current-location-box">
+        <div class="location-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <g
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              color="currentColor"
+            >
+              <path d="M14.5 9a2.5 2.5 0 1 1-5 0a2.5 2.5 0 0 1 5 0" />
+              <path
+                d="M13.257 17.494a1.813 1.813 0 0 1-2.514 0c-3.089-2.993-7.228-6.336-5.21-11.19C6.626 3.679 9.246 2 12 2s5.375 1.68 6.467 4.304c2.016 4.847-2.113 8.207-5.21 11.19M18 20c0 1.105-2.686 2-6 2s-6-.895-6-2"
+              />
+            </g>
+          </svg>
+          <h5>{{ (location$ | async) ? (location$ | async) : 'we_need_your_location_to_enhance_your_experience' | translate }}</h5>
+        </div>
+    
+        <div class="location-btn-group">
+          <app-button [class]="'btn btn-2 bg-theme'" [type]="'button'" [spinner]="false" [id]="'current_location_btn'" (click)="getCurrentLocation()">
+            <div [class]="{'position-relative spinning' : true}">
+              <i class="ri-focus-3-line"></i>
+              {{'use_current_location' | translate}}
+            </div>
+         </app-button>
+          <h6>
+            <span>OR</span>
+          </h6>
+          <button class="btn btn-theme-outline" (click)="LocationModal.openModal()">{{'select_manually' | translate}}</button>
+        </div>
+      </div>
+    </div>
+  </li>
+}
+
+<!-- Location Modal -->
+<app-location-modal #locationModal></app-location-modal>

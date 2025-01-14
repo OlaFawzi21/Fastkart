@@ -1,0 +1,39 @@
+<!-- Top Progress Loader -->
+<ngx-loading-bar class="loader-bg" [includeSpinner]="true" [height]="'3px'"></ngx-loading-bar>
+
+<!-- Main Loader -->
+@if(themeOptionService.preloader){
+   <app-loader></app-loader>
+}
+
+<!-- Layout Partial -->
+<app-header [logo]="setLogo().header_logo"></app-header>
+<router-outlet></router-outlet>
+<app-footer [footer]="setLogo().footer"></app-footer>
+
+<!-- Widgets -->
+<app-recent-purchase-popup></app-recent-purchase-popup>
+
+@if((themeOption$ | async)?.general?.cart_style == 'cart_mini'){
+   <app-sticky-cart></app-sticky-cart>
+}
+
+<app-sticky-compare></app-sticky-compare>
+
+<div class="theme-option">
+   @if((themeOption$ | async)?.general?.customizer_enable) {
+      <app-theme-customizer></app-theme-customizer>
+   }
+
+   @if((themeOption$ | async)?.general?.back_to_top_enable){
+      <app-back-to-top></app-back-to-top>
+   }
+</div>
+
+@if((themeOption$ | async)?.popup?.news_letter?.is_enable){
+   <app-newsletter-modal></app-newsletter-modal>
+}
+
+@if(exit && (themeOption$ | async)?.popup?.exit?.is_enable){
+   <app-exit-modal it-modal></app-exit-modal>
+}

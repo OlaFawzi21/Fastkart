@@ -1,0 +1,39 @@
+<!-- Language Basic Style -->
+@if(style == 'basic'){
+   <div (clickOutside)="hideDropdown()">
+      <app-button [class]="'btn dropdown-toggle'" [type]="'button'" [id]="'open_dropdown_basic_btn'" [spinner]="false" (click)="openDropDown()">
+         <span>
+            <!-- <div class="iti-flag {{ (defaultLanguage$ | async)?.locale }}"></div> -->
+            {{ (defaultLanguage$ | async)?.name }}
+         </span>
+      </app-button>
+      <ul class="dropdown-menu dropdown-menu-end language-dropdown" [class.show]="active">
+         @for(language of (language$ | async)?.data; track language){
+            <li>
+               <a class="dropdown-item" href="javascript:void(0)" (click)="selectLanguage(language)">
+                  <!-- <div class="iti-flag {{ language.locale }}"></div> -->
+                  <span>{{ language.name }}</span>
+               </a>
+            </li>
+         }
+      </ul>
+   </div>
+}
+
+<!-- Language Standard Style -->
+@if(style == 'standard'){
+   <div (clickOutside)="hideDropdown()">
+      <app-button [class]="'dropdown-toggle'" [type]="'button'" [id]="'open_dropdown_standard_btn'" [spinner]="false" (click)="openDropDown()">
+      </app-button>
+      <ul class="dropdown-menu" [class.show]="active">
+         @for(language of (language$ | async)?.data; track language){
+            <li>
+               <a class="dropdown-item" href="javascript:void(0)" (click)="selectLanguage(language)">
+                  <!-- <div class="iti-flag {{ language.locale }}"></div> -->
+                  <span>{{ language.name }}</span>
+               </a>
+            </li>
+         }
+      </ul>
+   </div>
+}

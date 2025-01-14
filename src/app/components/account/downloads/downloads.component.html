@@ -1,0 +1,64 @@
+<div class="title-header">
+   <div class="d-flex align-items-center">
+      <h5>{{ 'downloads' | translate }}</h5>
+   </div>
+</div>
+<div class="download-detail dashboard-bg-box">
+   <form>
+      <div class="input-group download-form">
+         <input type="text" class="form-control" placeholder="{{'search_your_download' | translate}}" [formControl]="term">
+         <button class="btn theme-bg-color text-light" type="button" (click)="search()">Search</button>
+      </div>
+   </form>
+
+   @if((download$ | async)?.data?.length){
+      <div class="download-table">
+         <div class="table-responsive">
+            <table class="table">
+               <thead>
+                  <tr>
+                     <th>{{ 'image' | translate }}</th>
+                     <th class="table-name">{{ 'name' | translate }}</th>
+                     <th>{{ 'action' | translate }}</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  @for(data of (download$ | async)?.data; track data ; let i = $index){
+                     <tr>
+                        <td>
+                           <img src="{{ data.item_image }}" class="img-fluid" alt="image">
+                        </td>
+                        <td class="table-name">{{ data.item_name }}</td>
+                        <td>
+                           <div ngbDropdown class="d-inline-block" container="body" placement="bottom-end">
+                              <button type="button" class="btn dropdown-toggle" ngbDropdownToggle>
+                                 {{ 'Download' | translate }}
+                              </button>
+                              <div ngbDropdownMenu class="download-dropdown-menu">
+                                 @if(data.can_download_file){
+                                    <button ngbDropdownItem (click)="downloadFiles(data.id)">{{'all_files' | translate}} &amp; {{'documentation' | translate}}</button>
+                                 }
+
+                                 @if(data.can_download_license){
+                                    <button ngbDropdownItem (click)="downloadLicense(data.id)">{{'license_certificate' | translate}} &amp; {{"purchase_code" | translate}}</button>
+                                 }
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                  }
+               </tbody>
+            </table>
+         </div>
+      </div>
+   }
+</div>
+
+@if(!(download$ | async)?.data?.length){
+   <app-no-data 
+      [class]="'no-data-added'" 
+      [image]="'assets/svg/empty-items.svg'" 
+      [text]="'no_item_found'" 
+      [description]="'no_orders_have_yet'">
+   </app-no-data>
+}

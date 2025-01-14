@@ -1,0 +1,29 @@
+<app-collection-sort [filter]="filter" [gridCol]="gridCol" (setGridClass)="setGridClass($event)"></app-collection-sort>
+<div [ngClass]="{ 
+  'full_border': (themeOption$ | async)?.product?.full_border,
+  'product_img_bg': (themeOption$ | async)?.product?.image_bg,
+  'full_bg': (themeOption$ | async)?.product?.product_box_bg,
+  'product_border': (themeOption$ | async)?.product?.product_box_border }">
+   <div [class]="gridClass">
+
+      @if(productService.skeletonLoader){
+         @for(item of skeletonItems; track item){
+            <app-skeleton-product-box></app-skeleton-product-box>
+         }
+      }@else {
+         @for(product of (product$ | async)?.data; track product){
+            <app-product-box [product]="product" [class]="'product-box-3'" [style]="'horizontal'"></app-product-box>
+         }
+      }
+   </div>
+
+   @if(!(product$ | async)?.data?.length && !productService.skeletonLoader){
+      <app-no-data [class]="'no-data-added collection-no-data'" [image]="'assets/svg/no-product.svg'" [text]="'sorry_cant_find_products_looking'" [description]="'please_check_misspelt_something_searching_other_way'">
+      </app-no-data>
+   }
+</div>
+
+@if((product$ | async)?.data?.length && !productService.skeletonLoader){
+   <app-collection-paginate [filter]="filter">
+   </app-collection-paginate>
+}

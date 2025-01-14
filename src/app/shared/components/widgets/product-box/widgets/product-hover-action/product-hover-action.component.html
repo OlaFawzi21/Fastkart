@@ -1,0 +1,29 @@
+<ul class="product-option">
+
+   @if(!(hideAction && hideAction.includes('view'))){
+      <li (click)="productDetailModal.openModal()">
+         <a href="javascript:void(0)">
+            <i class="ri-eye-line"></i>
+         </a>
+      </li>
+   }
+
+   @if(!(hideAction && hideAction.includes('compare'))){
+      <li (click)="addToCompare(product.id)">
+         <a href="javascript:void(0)">
+            <i class="ri-refresh-line"></i>
+         </a>
+      </li>
+   }
+
+   @if(!(hideAction && hideAction.includes('wishlist'))){
+      <li>
+         <a href="javascript:void(0)" class="notifi-wishlist" [class.theme-color]="product.is_wishlist" (click)="addToWishlist(product)">
+            <i class="ri-heart-{{ product.is_wishlist ? 'fill' : 'line' }}"></i>
+         </a>
+      </li>
+   }
+
+</ul>
+<app-product-detail-modal #productDetailModal [product]="product"></app-product-detail-modal>
+<app-variation-modal #variationModal></app-variation-modal>

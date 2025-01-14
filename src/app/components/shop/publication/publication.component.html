@@ -1,0 +1,104 @@
+<app-breadcrumb [breadcrumb]="breadcrumb"></app-breadcrumb>
+<!-- Author Section Start -->
+<section class="author-section">
+  <div class="container-fluid-lg">
+    <div class="author-main-box">
+      <div class="cover-image">
+        <img
+          src="{{ publication.publisher_cover_image ? publication.publisher_cover_image.original_url  : 'assets/images/author_placeholder.png'}}"
+          class="img-fluid"
+          [alt]="publication.publisher_name"
+        />
+      </div>
+
+      <div class="author-box">
+        <img
+          class="img-fluid author-image"
+          alt=""
+        src="{{ publication.publisher_logo.original_url }}"
+        />
+        <div class="right-side-box">
+          <div>
+            <div class="author-name">
+              <h4>{{ publication.publisher_name }}</h4>
+              <p>{{ publication.description }}</p>
+            </div>
+
+            <div class="author-bottom-box">
+              <div>
+                <h5>{{'publisher_details' | translate}}:</h5>
+                <ul class="country-list">
+                  <li><span>Country : </span>{{ publication.country.name }}</li>
+                  <li><span>State : </span>{{ publication.state.name }}</li>
+                  <li><span>City : </span>{{ publication.city }}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="social-list-box">
+            <h5>{{'social_links' | translate}}:</h5>
+            <ul class="social-list">
+              @if(publication.facebook){
+                <li>
+                  <a href="{{ publication.facebook }}" class="fb" target="_blank">
+                    <i class="ri-facebook-fill"></i>
+                  </a>
+                </li>
+              }
+              @if(publication.instagram){
+                <li>
+                  <a
+                    href="{{ publication.instagram }}"
+                    class="insta"
+                    target="_blank"
+                  >
+                    <i class="ri-instagram-fill"></i>
+                  </a>
+                </li>
+              }
+              <li>
+                <a
+                  href="{{ publication.twitter }}"
+                  class="twitter"
+                  target="_blank"
+                >
+                  <i class="ri-twitter-x-fill"></i>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="{{ publication.youtube }}"
+                  class="youtube"
+                  target="_blank"
+                >
+                  <i class="ri-youtube-fill"></i>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="{{ publication.pinterest }}"
+                  target="_blank"
+                  class="pinterest"
+                >
+                  <i class="ri-pinterest-fill"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Author Section End -->
+
+<section class="section-b-space shop-section" id="filtered_products">
+  <div class="container-fluid-lg">
+    <div class="row">
+      <div class="col-custome-12">
+        <app-collection-products [filter]="filter"></app-collection-products>
+      </div>
+    </div>
+  </div>
+</section>

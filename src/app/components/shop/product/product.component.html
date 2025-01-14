@@ -1,0 +1,45 @@
+@if(layout !== 'product_digital'){
+   <app-breadcrumb [breadcrumb]="breadcrumb"></app-breadcrumb>
+}@else {
+   <app-breadcrumb-digital [product]="(product$ | async)!"></app-breadcrumb-digital>
+}
+
+<!-- Product Details Layout -->
+<section class="product-section" [class.section-b-space]="!(product$ | async)?.related_products?.length" [class.theme-product-section]="layout === 'product_digital'">
+
+   @if(layout == 'product_thumbnail'){
+      <app-product-thumbnail [product]="(product$ | async)!" [option]="themeOptions$ | async"></app-product-thumbnail>
+   }
+
+   @if(layout == 'product_images'){
+      <app-product-images [product]="(product$ | async)!" [option]="themeOptions$ | async"></app-product-images>
+   }
+
+   @if(layout == 'product_slider'){
+      <app-product-slider [product]="(product$ | async)!" [option]="themeOptions$ | async"></app-product-slider>
+   }
+
+   @if(layout == 'product_sticky'){
+      <app-product-sticky [product]="(product$ | async)!" [option]="themeOptions$ | async"></app-product-sticky>
+   }
+
+   @if(layout == 'product_accordion'){
+      <app-product-accordion [product]="(product$ | async)!" [option]="themeOptions$ | async"></app-product-accordion>
+   }
+
+   @if(layout == 'product_digital'){
+      <app-product-digital [product]="(product$ | async)!" [option]="themeOptions$ | async"></app-product-digital>
+   }
+
+</section>
+
+<!-- Related Products -->
+@if((product$ | async)?.related_products?.length){
+   <section class="product-list-section releted-product section-b-space">
+      <app-related-products [product]="product$ | async"></app-related-products>
+   </section>
+}
+
+<!-- Sticky Cart Box Start -->
+<app-sticky-checkout [product]="(product$ | async)!"></app-sticky-checkout>
+<!-- Sticky Cart Box End -->

@@ -1,0 +1,40 @@
+<ng-template #locationModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <div>
+        <h5 class="modal-title w-100" id="deal_today">{{ 'choose_your_location' | translate }}</h5>
+        <p class="text-content">{{ 'enter_your_address_and_we_will_specify_the_offer_for_your_area' | translate }}</p>
+      </div>
+      <app-button [type]="'button'" [class]="'btn btn-close'" [id]="'close_deal_modal_btn'"
+        (click)="modal.dismiss('Cross click')">
+        <i class="ri-close-line"></i>
+      </app-button>
+    </div>
+    <div class="modal-body">
+      <div class="search-box">
+        <div class="search-input-button">
+          <button (click)="clearZone()" class="clear-btn btn">
+            <i class="ri-close-line"></i>
+          </button>
+          <input type="text" class="form-control search-input" placeholder="{{'search_for_a_zone' | translate}}" #searchInput value="term"
+            [(ngModel)]="term" (input)="onCityInput($event.target)">
+        </div>
+        <button [class]="'btn location-btn'" type="button" (click)="getCurrentLocation()">
+          <i class="ri-focus-3-line"></i>
+          <span>{{ 'use_current_location' | translate}}</span>
+        </button>
+        @if (suggestions.length > 0) {
+        <div [class.show]="openSuggestions">
+          <ul class="search-list-box theme-dropdown">
+            @for (city of suggestions; track city.id; let i = $index) {
+            <li [class.selected]="i === selectedIndex" (click)="selectCity(city)">
+              <i class="ri-map-pin-line"></i>{{ city.description.split(',').slice(0, 2).join(',').trim() }}
+            </li>
+            }
+          </ul>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</ng-template>

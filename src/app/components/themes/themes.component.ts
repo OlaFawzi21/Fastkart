@@ -32,20 +32,23 @@ export class ThemesComponent {
   public theme: string;
   public homePage: any;
 
-  constructor(private store: Store,
+  constructor(
+    private store: Store,
     private route: ActivatedRoute,
-    private themeOptionService: ThemeOptionService) {
-      this.route.queryParams.subscribe(params => {
-        this.themeOptionService.preloader = true;
-        this.activeTheme$.subscribe(theme => {
-          this.theme = params['theme'] ? params['theme'] : theme;
-          if(this.theme){
-            this.store.dispatch(new GetHomePage(params['theme'] ? params['theme'] : theme)).subscribe((data: any) => {
-              this.homePage = data.theme.homePage;
-              this.themeOptionService.preloader = false;
-            })
-          }
-        })
+    private themeOptionService: ThemeOptionService
+  ) {
+    this.route.queryParams.subscribe(params => {
+      this.themeOptionService.preloader = true;
+      this.activeTheme$.subscribe(theme => {
+        // Default to 'rome' if no theme is provided in the query params
+        this.theme = params['theme'] || 'rome';  // Use 'rome' as the default theme
+        if (this.theme) {
+          this.store.dispatch(new GetHomePage(this.theme)).subscribe((data: any) => {
+            this.homePage = data.theme.homePage;
+            this.themeOptionService.preloader = false;
+          });
+        }
+      });
     });
   }
 

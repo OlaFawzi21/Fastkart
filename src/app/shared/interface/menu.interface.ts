@@ -28,7 +28,7 @@ export interface Menu {
     title: string;
     link_type: string;
     path: string;
-    parent_id: number; 
+    parent_id: number | null; 
     mega_menu: number | boolean;
     mega_menu_type: string;
     badge_text: string;

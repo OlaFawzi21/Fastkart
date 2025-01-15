@@ -48,9 +48,6 @@ export class BlogComponent {
   public totalItems: number = 0;
   public skeletonItems = Array.from({ length: 9 }, (_, index) => index);
 
-  public style: string;
-  public sidebar: string = 'left_sidebar';
-
   constructor(private store: Store, private route: ActivatedRoute,
     public blogService: BlogService) {
     this.route.queryParams.subscribe(params => {
@@ -63,24 +60,6 @@ export class BlogComponent {
       this.breadcrumb.items.push({ label: 'Blogs', active: true });
 
       this.store.dispatch(new GetBlogs(this.filter));
-
-      // For Demo Purpose only
-      if(params['style']) {
-        this.style = params['style'];
-      }
-
-      if(params['sidebar']) {
-        this.sidebar = params['sidebar'];
-      }
-
-      if(!params['style'] && !params['sidebar']) {
-        // Get Blog Layout
-        this.themeOption$.subscribe(theme => {
-          this.style = theme?.blog?.blog_style;
-          this.sidebar = theme?.blog.blog_sidebar_type;
-        });
-      }
-
     });
     this.blog$.subscribe(blog => this.totalItems = blog?.total);
   }

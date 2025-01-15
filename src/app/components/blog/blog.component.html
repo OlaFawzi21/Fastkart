@@ -1,73 +1,109 @@
-<!-- <app-breadcrumb [breadcrumb]="breadcrumb"></app-breadcrumb>
+<app-breadcrumb [breadcrumb]="breadcrumb"></app-breadcrumb>
 <section class="blog-section section-b-space">
-   <div class="container-fluid-lg">
-      <div class="row g-4">
-         <div class="col-xxl-12 col-xl-12 col-lg-12">
-            <div *ngIf="blogService?.skeletonLoader">
-               <div class="row g-4">
-                  <div *ngFor="let item of skeletonItems" class="col-xxl-4 col-sm-6">
-                     <app-skeleton-blog></app-skeleton-blog>
-                  </div>
-               </div>
+  <div class="container-fluid-lg">
+    <div class="row g-4">
+      <div class="col-xxl-12 col-xl-12 col-lg-12">
+        <div *ngIf="blogService?.skeletonLoader">
+          <div class="row g-4">
+            <div *ngFor="let item of skeletonItems" class="col-xxl-4 col-sm-6">
+              <app-skeleton-blog></app-skeleton-blog>
             </div>
+          </div>
+        </div>
 
-            <div *ngIf="!(blogService?.skeletonLoader) && (blog$ | async)?.data?.length">
-               <div class="row g-4">
-                  <div *ngFor="let blog of (blog$ | async)?.data" class="col-xxl-4 col-sm-6">
-                     <div class="blog-box">
+        <div
+          *ngIf="!blogService?.skeletonLoader && (blog$ | async)?.data?.length"
+        >
+          <div class="row g-4">
+            <div
+              *ngFor="let blog of (blog$ | async)?.data"
+              class="col-xxl-4 col-sm-6"
+            >
+              <div class="blog-box">
+                <div *ngIf="blog?.is_featured" class="blog-label-tag">
+                  <span>{{ "featured" | translate }}</span>
+                </div>
 
-                        <div *ngIf="blog?.is_featured" class="blog-label-tag">
-                           <span>{{ 'featured' | translate }}</span>
-                        </div>
+                <div class="blog-image">
+                  <a [routerLink]="['/blog/', blog?.slug]">
+                    <img
+                      [src]="
+                        blog?.blog_thumbnail?.original_url ||
+                        'assets/images/blog.png'
+                      "
+                      [alt]="blog?.title"
+                    />
+                  </a>
+                </div>
 
-                        <div class="blog-image">
-                           <a [routerLink]="['/blog/', blog?.slug]">
-                              <img [src]="blog?.blog_thumbnail?.original_url || 'assets/images/blog.png'" [alt]="blog?.title">
-                           </a>
-                        </div>
+                <div class="blog-contain blog-contain-2">
+                  <div class="blog-label">
+                    <span class="time">
+                      <i class="ri-time-line"></i>
+                      <span>{{
+                        blog?.created_at | date : "dd MMM yyyy hh:mm:a"
+                      }}</span>
+                    </span>
 
-                        <div class="blog-contain blog-contain-2">
-                           <div class="blog-label">
-                              <span class="time">
-                                 <i class="ri-time-line"></i>
-                                 <span>{{ blog?.created_at | date: 'dd MMM yyyy hh:mm:a' }}</span>
-                              </span>
-
-                              <span *ngIf="(themeOption$ | async)?.blog?.blog_author_enable" class="super">
-                                 <i class="ri-user-line"></i>
-                                 <span>{{ blog?.created_by?.name }}</span>
-                              </span>
-                           </div>
-
-                           <a [routerLink]="['/blog/', blog?.slug]">
-                              <h3>{{ blog?.title }}</h3>
-                           </a>
-
-                           <div *ngIf="blog?.description">
-                              <p [innerHTML]="blog.description | summary:200"></p>
-                           </div>
-
-                           <a *ngIf="(themeOption$ | async)?.blog?.read_more_enable" [routerLink]="['/blog/', blog?.slug]" class="blog-button">
-                              {{ 'read_more' | translate }} <i class="ri-arrow-right-fill"></i>
-                           </a>
-                        </div>
-                     </div>
+                    <span
+                      *ngIf="(themeOption$ | async)?.blog?.blog_author_enable"
+                      class="super"
+                    >
+                      <i class="ri-user-line"></i>
+                      <span>{{ blog?.created_by?.name }}</span>
+                    </span>
                   </div>
-               </div>
+
+                  <a [routerLink]="['/blog/', blog?.slug]">
+                    <h3>{{ blog?.title }}</h3>
+                  </a>
+
+                  <div *ngIf="blog?.description">
+                    <p [innerHTML]="blog.description | summary : 200"></p>
+                  </div>
+
+                  <a
+                    *ngIf="(themeOption$ | async)?.blog?.read_more_enable"
+                    [routerLink]="['/blog/', blog?.slug]"
+                    class="blog-button"
+                  >
+                    {{ "read_more" | translate }}
+                    <i class="ri-arrow-right-fill"></i>
+                  </a>
+                </div>
+              </div>
             </div>
+          </div>
+        </div>
 
-            <app-no-data *ngIf="!(blog$ | async)?.data?.length" class="no-data-added" [image]="'assets/svg/empty-items.svg'" [text]="'no_blogs_found'" [description]="'not_find_any_blogs_matching_search_criteria'">
-            </app-no-data>
+        <app-no-data
+          *ngIf="!(blog$ | async)?.data?.length"
+          class="no-data-added"
+          [image]="'assets/svg/empty-items.svg'"
+          [text]="'no_blogs_found'"
+          [description]="'not_find_any_blogs_matching_search_criteria'"
+        >
+        </app-no-data>
 
-            <nav *ngIf="(blog$ | async)?.data?.length && !blogService?.skeletonLoader" class="custome-pagination">
-               <app-pagination [total]="totalItems" [currentPage]="filter['page']" [pageSize]="filter['paginate']" (setPage)="setPaginate($event)">
-               </app-pagination>
-            </nav>
-         </div>
+        <nav
+          *ngIf="(blog$ | async)?.data?.length && !blogService?.skeletonLoader"
+          class="custome-pagination"
+        >
+          <app-pagination
+            [total]="totalItems"
+            [currentPage]="filter['page']"
+            [pageSize]="filter['paginate']"
+            (setPage)="setPaginate($event)"
+          >
+          </app-pagination>
+        </nav>
       </div>
-   </div>
-</section> -->
+    </div>
+  </div>
+</section>
 
+
+<!-- 
 <app-breadcrumb [breadcrumb]="breadcrumb"></app-breadcrumb>
 <section class="blog-section section-b-space">
   <div class="container-fluid-lg">
@@ -168,4 +204,4 @@
       </div>
     </div>
   </div>
-</section>
+</section> -->

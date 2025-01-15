@@ -2896,9 +2896,9 @@
     .blog-contain {
       padding: 0 20px 20px;
 
-      &-2 {
-        padding: 0;
-      }
+      // &-2 {
+      //   padding: 0;
+      // }
 
       .blog-label {
         @include flex_wrap($dis: flex, $wrap: wrap, $gap: 2px 15px);

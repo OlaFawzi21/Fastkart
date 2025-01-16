@@ -33,7 +33,9 @@ resolve(route: ActivatedRouteSnapshot): Observable<any> {
         this.themeOptionService.productBox = 'premium';
       }  else {
         this.themeOption$.subscribe(theme => {
-          this.themeOptionService.productBox = theme?.product ? theme?.product?.product_box_variant : 'basic';
+          this.themeOptionService.productBox = theme?.product
+            ? theme?.product?.product_box_variant
+            : "classic";
         });
     }
     return this.store.dispatch(new UpdateProductBox(this.themeOptionService.productBox));

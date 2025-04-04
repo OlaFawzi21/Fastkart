@@ -9,7 +9,7 @@ import { Blog, BlogModel } from '../../../shared/interface/blog.interface';
 import { ThemeOptionState } from '../../../shared/state/theme-option.state';
 import { AboutUs, Option } from '../../../shared/interface/theme-option.interface';
 import * as data from  '../../../shared/data/owl-carousel';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { RouterModule } from '@angular/router';
 import { BreadcrumbComponent } from '../../../shared/components/widgets/breadcrumb/breadcrumb.component';
 import { NoDataComponent } from '../../../shared/components/widgets/no-data/no-data.component';
@@ -23,128 +23,141 @@ export interface Clients {
 }
 
 @Component({
-    selector: 'app-about-us',
-    imports: [TranslateModule, RouterModule, CarouselModule,
-        BreadcrumbComponent, NoDataComponent
-    ],
-    templateUrl: './about-us.component.html',
-    styleUrl: './about-us.component.scss'
+  selector: "app-about-us",
+  imports: [
+    TranslateModule,
+    RouterModule,
+    CarouselModule,
+    BreadcrumbComponent,
+    NoDataComponent,
+  ],
+  templateUrl: "./about-us.component.html",
+  styleUrl: "./about-us.component.scss",
 })
 export class AboutUsComponent {
-
-  blog$: Observable<BlogModel> = inject(Store).select(BlogState.blog) as Observable<BlogModel>;
-  themeOptions$: Observable<Option> = inject(Store).select(ThemeOptionState.themeOptions) as Observable<Option>;
+  blog$: Observable<BlogModel> = inject(Store).select(
+    BlogState.blog
+  ) as Observable<BlogModel>;
+  themeOptions$: Observable<Option> = inject(Store).select(
+    ThemeOptionState.themeOptions
+  ) as Observable<Option>;
 
   public aboutUs?: AboutUs;
   public blogs: Blog[] = [];
 
   public breadcrumb: Breadcrumb = {
-    title: "About Us",
-    items: [{ label: 'About Us', active: true }]
-  }
+    title: this.translate.instant("about_us"),
+    items: [{ label: this.translate.instant("about_us"), active: true }],
+  };
 
   public productSlider = data.productSliderMargin;
   public storageURL = environment.storageURL;
 
   public clientsOptions: OwlOptions = {
-    loop:true,
-    margin:20,
+    loop: true,
+    margin: 20,
     items: 3,
-    autoplay:true,
+    autoplay: true,
     nav: false,
     responsive: {
       0: {
-        items: 1
+        items: 1,
       },
       400: {
-        items: 2
+        items: 2,
       },
       740: {
-        items: 3
+        items: 3,
       },
       940: {
-        items: 4
-      }
+        items: 4,
+      },
     },
-  }
+  };
 
   public teamOptions: OwlOptions = {
-    loop:true,
-    margin:20,
+    loop: true,
+    margin: 20,
     items: 4,
-    autoplay:true,
+    autoplay: true,
     nav: false,
     responsive: {
       0: {
-        items: 1
+        items: 1,
       },
       400: {
-        items: 2
+        items: 2,
       },
       740: {
-        items: 3
+        items: 3,
       },
       940: {
-        items: 4
-      }
+        items: 4,
+      },
     },
-  }
+  };
 
   public testimonialsOptions: OwlOptions = {
-    loop:true,
-    margin:20,
+    loop: true,
+    margin: 20,
     items: 4,
     // autoplay:true,
-    center:true,
+    center: true,
     nav: false,
     responsive: {
       0: {
-        items: 1
+        items: 1,
       },
       400: {
-        items: 2
+        items: 2,
       },
       740: {
-        items: 3
+        items: 3,
       },
       940: {
-        items: 4
-      }
+        items: 4,
+      },
     },
-  }
+  };
 
   public blogOptions: OwlOptions = {
-    loop:true,
-    margin:20,
+    loop: true,
+    margin: 20,
     items: 4,
-    autoplay:true,
+    autoplay: true,
     nav: false,
     responsive: {
       0: {
-        items: 1
+        items: 1,
       },
       400: {
-        items: 2
+        items: 2,
       },
       740: {
-        items: 4
+        items: 4,
       },
       940: {
-        items: 4
-      }
+        items: 4,
+      },
     },
-  }
+  };
 
-  constructor( private store: Store){
-    this.themeOptions$.subscribe(option =>{
+  constructor(private store: Store, private translate: TranslateService) {
+    this.themeOptions$.subscribe((option) => {
       this.aboutUs = option?.about_us;
-    })
-    if (Array.isArray(this.aboutUs?.blog?.blog_ids) && this.aboutUs?.blog?.blog_ids?.length) {
-      this.store.dispatch(new GetBlogs({status: 1, ids: this.aboutUs?.blog.blog_ids?.join()}));
-      this.blog$.subscribe(blogs => {
-        this.blogs = blogs?.data.filter(blog => this.aboutUs?.blog.blog_ids?.includes(blog?.id!));
+    });
+    if (
+      Array.isArray(this.aboutUs?.blog?.blog_ids) &&
+      this.aboutUs?.blog?.blog_ids?.length
+    ) {
+      this.store.dispatch(
+        new GetBlogs({ status: 1, ids: this.aboutUs?.blog.blog_ids?.join() })
+      );
+      this.blog$.subscribe((blogs) => {
+        this.blogs = blogs?.data.filter((blog) =>
+          this.aboutUs?.blog.blog_ids?.includes(blog?.id!)
+        );
       });
     }
   }
-
 }

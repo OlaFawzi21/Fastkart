@@ -9,7 +9,7 @@ import { CompareService } from '../../../shared/services/compare.service';
 import { CartAddOrUpdate } from '../../../shared/interface/cart.interface';
 import { AddToCart } from '../../../shared/action/cart.action';
 import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CurrencySymbolPipe } from '../../../shared/pipe/currency-symbol.pipe';
 import { TitleCasePipe } from '../../../shared/pipe/title-case.pipe';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -17,42 +17,53 @@ import { BreadcrumbComponent } from '../../../shared/components/widgets/breadcru
 import { NoDataComponent } from '../../../shared/components/widgets/no-data/no-data.component';
 
 @Component({
-    selector: 'app-compare',
-    imports: [CommonModule, TranslateModule, CurrencySymbolPipe,
-        TitleCasePipe, NgbModule, BreadcrumbComponent, NoDataComponent
-    ],
-    templateUrl: './compare.component.html',
-    styleUrl: './compare.component.scss'
+  selector: "app-compare",
+  imports: [
+    CommonModule,
+    TranslateModule,
+    CurrencySymbolPipe,
+    TitleCasePipe,
+    NgbModule,
+    BreadcrumbComponent,
+    NoDataComponent,
+  ],
+  templateUrl: "./compare.component.html",
+  styleUrl: "./compare.component.scss",
 })
 export class CompareComponent {
-
   public breadcrumb: Breadcrumb = {
-    title: "Compare",
-    items: [{ label: 'Compare', active: true }]
-  }
+    title: this.translate.instant("compare"),
+    items: [{ label: this.translate.instant("compare"), active: true }],
+  };
 
   public skeletonItems = Array.from({ length: 3 }, (_, index) => index);
 
-  compareItems$: Observable<Product[]> = inject(Store).select(CompareState.compareItems);
+  compareItems$: Observable<Product[]> = inject(Store).select(
+    CompareState.compareItems
+  );
 
-  constructor(private store: Store, public compareService: CompareService) {
+  constructor(
+    private store: Store,
+    public compareService: CompareService,
+    private translate: TranslateService
+  ) {
     this.store.dispatch(new GetCompare());
   }
 
   moveToCart(product: Product) {
-    if(product) {
+    if (product) {
       const params: CartAddOrUpdate = {
         id: null,
         product_id: product?.id,
         product: product ? product : null,
         variation: null,
         variation_id: null,
-        quantity: 1
-      }
+        quantity: 1,
+      };
       this.store.dispatch(new AddToCart(params)).subscribe({
         complete: () => {
           this.removeCompare(product.id);
-        }
+        },
       });
     }
   }
@@ -60,5 +71,4 @@ export class CompareComponent {
   removeCompare(id: number) {
     this.store.dispatch(new DeleteCompare(id));
   }
-
 }

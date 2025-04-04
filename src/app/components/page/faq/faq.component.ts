@@ -7,36 +7,43 @@ import { GetFaqs } from '../../../shared/action/page.action';
 import { FaqModel } from '../../../shared/interface/page.interface';
 import { PageService } from '../../../shared/services/page.service';
 import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BreadcrumbComponent } from '../../../shared/components/widgets/breadcrumb/breadcrumb.component';
 import { SkeletonPageComponent } from '../skeleton-page/skeleton-page.component';
 import { NoDataComponent } from '../../../shared/components/widgets/no-data/no-data.component';
 
 @Component({
-    selector: 'app-faq',
-    imports: [CommonModule, TranslateModule, NgbModule,
-        BreadcrumbComponent, SkeletonPageComponent, NoDataComponent
-    ],
-    templateUrl: './faq.component.html',
-    styleUrl: './faq.component.scss'
+  selector: "app-faq",
+  imports: [
+    CommonModule,
+    TranslateModule,
+    NgbModule,
+    BreadcrumbComponent,
+    SkeletonPageComponent,
+    NoDataComponent,
+  ],
+  templateUrl: "./faq.component.html",
+  styleUrl: "./faq.component.scss",
 })
 export class FaqComponent {
-
   public breadcrumb: Breadcrumb = {
-    title: "FAQ's",
-    items: [{ label: "FAQ's", active: true }]
-  }
+    title: this.translate.instant("faqs"),
+    items: [{ label: this.translate.instant("faqs"), active: true }],
+  };
 
   faq$: Observable<FaqModel> = inject(Store).select(PageState.faq);
 
-  constructor(private store: Store, public pageService: PageService) {
+  constructor(
+    private store: Store,
+    public pageService: PageService,
+    private translate: TranslateService
+  ) {
     this.pageService.skeletonLoader = true;
     this.store.dispatch(new GetFaqs()).subscribe({
       complete: () => {
         this.pageService.skeletonLoader = false;
-      }
+      },
     });
   }
-
 }

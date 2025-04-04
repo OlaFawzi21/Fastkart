@@ -61,13 +61,13 @@ import { AuthorState } from './shared/state/author.state';
 import { PublicationState } from './shared/state/publication.state';
 
 // AoT requires an exported function for factories
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslationLoader(http);
-}
-
 // export function HttpLoaderFactory(http: HttpClient) {
-//   return new TranslateHttpLoader(http, '/assets/i18n/', '.json'); // Adjust path as needed
+//   return new TranslationLoader(http);
 // }
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, "./locales/", ".json"); // Adjust path as needed
+}
 
 function appLoadFactory(config: SettingService) {
   return () => config.getReCaptchaConfig();

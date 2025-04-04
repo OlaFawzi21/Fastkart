@@ -1,43 +1,55 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Store } from '@ngxs/store';
-import { Router } from '@angular/router';
-import { Breadcrumb } from '../../../shared/interface/breadcrumb';
-import { TranslateModule } from '@ngx-translate/core';
-import { BreadcrumbComponent } from '../../../shared/components/widgets/breadcrumb/breadcrumb.component';
-import { ButtonComponent } from '../../../shared/components/widgets/button/button.component';
-import { AlertComponent } from '../../../shared/components/widgets/alert/alert.component';
+import { Component } from "@angular/core";
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
+import { Store } from "@ngxs/store";
+import { Router } from "@angular/router";
+import { Breadcrumb } from "../../../shared/interface/breadcrumb";
+import { TranslateModule, TranslateService } from "@ngx-translate/core";
+import { BreadcrumbComponent } from "../../../shared/components/widgets/breadcrumb/breadcrumb.component";
+import { ButtonComponent } from "../../../shared/components/widgets/button/button.component";
+import { AlertComponent } from "../../../shared/components/widgets/alert/alert.component";
 
 @Component({
-    selector: 'app-order-tracking',
-    imports: [TranslateModule, ReactiveFormsModule, BreadcrumbComponent,
-        ButtonComponent, AlertComponent
-    ],
-    templateUrl: './order-tracking.component.html',
-    styleUrl: './order-tracking.component.scss'
+  selector: "app-order-tracking",
+  imports: [
+    TranslateModule,
+    ReactiveFormsModule,
+    BreadcrumbComponent,
+    ButtonComponent,
+    AlertComponent,
+  ],
+  templateUrl: "./order-tracking.component.html",
+  styleUrl: "./order-tracking.component.scss",
 })
 export class OrderTrackingComponent {
-
   public form: FormGroup;
 
   public breadcrumb: Breadcrumb = {
-    title: "Order Tracking",
-    items: [{ label: 'Order Tracking', active: true }]
-  }
+    title: this.translate.instant("order_tracking"),
+    items: [{ label: this.translate.instant("order_tracking"), active: true }],
+  };
 
-  constructor(private store: Store, private formBuilder: FormBuilder,
-    private router: Router) {
+  constructor(
+    private store: Store,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private translate: TranslateService
+  ) {
     this.form = this.formBuilder.group({
-      order_number: new FormControl('', [Validators.required]),
-      email_or_phone: new FormControl('', [Validators.required])
+      order_number: new FormControl("", [Validators.required]),
+      email_or_phone: new FormControl("", [Validators.required]),
     });
   }
 
   submit() {
     this.form.markAllAsTouched();
-    if(this.form.valid) {
-      this.router.navigate([ 'order/details' ], { queryParams: this.form.value });
+    if (this.form.valid) {
+      this.router.navigate(["order/details"], { queryParams: this.form.value });
     }
   }
-
 }

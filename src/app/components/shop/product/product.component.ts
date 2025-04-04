@@ -18,67 +18,87 @@ import { ProductStickyComponent } from './product-details/product-sticky/product
 import { ProductThumbnailComponent } from './product-details/product-thumbnail/product-thumbnail.component';
 import { RelatedProductsComponent } from './product-details/widgets/related-products/related-products.component';
 import { StickyCheckoutComponent } from './product-details/widgets/sticky-checkout/sticky-checkout.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-    selector: 'app-product',
-    imports: [CommonModule, BreadcrumbComponent, BreadcrumbDigitalComponent,
-        ProductThumbnailComponent, RelatedProductsComponent, StickyCheckoutComponent,
-        ProductImagesComponent, ProductSliderComponent, ProductStickyComponent,
-        ProductAccordionComponent, ProductDigitalComponent
-    ],
-    templateUrl: './product.component.html',
-    styleUrl: './product.component.scss'
+  selector: "app-product",
+  imports: [
+    CommonModule,
+    BreadcrumbComponent,
+    BreadcrumbDigitalComponent,
+    ProductThumbnailComponent,
+    RelatedProductsComponent,
+    StickyCheckoutComponent,
+    ProductImagesComponent,
+    ProductSliderComponent,
+    ProductStickyComponent,
+    ProductAccordionComponent,
+    ProductDigitalComponent,
+  ],
+  templateUrl: "./product.component.html",
+  styleUrl: "./product.component.scss",
 })
 export class ProductComponent {
-
-  product$: Observable<Product> = inject(Store).select(ProductState.selectedProduct) as Observable<Product>;
-  themeOptions$: Observable<Option> = inject(Store).select(ThemeOptionState.themeOptions) as Observable<Option>;
+  product$: Observable<Product> = inject(Store).select(
+    ProductState.selectedProduct
+  ) as Observable<Product>;
+  themeOptions$: Observable<Option> = inject(Store).select(
+    ThemeOptionState.themeOptions
+  ) as Observable<Option>;
 
   public breadcrumb: Breadcrumb = {
-    title: "Product",
-    items: []
-  }
-  public layout: string = 'product_digital';
+    title: this.translate.instant("product"),
+    items: [],
+  };
+  public layout: string = "product_digital";
   public product: Product;
   public isScrollActive = false;
 
-  constructor(private route: ActivatedRoute) {
-    this.product$.subscribe(product => {
+  constructor(
+    private route: ActivatedRoute,
+    private translate: TranslateService
+  ) {
+    this.product$.subscribe((product) => {
       this.breadcrumb.items = [];
       this.breadcrumb.title = product.name;
-      this.breadcrumb.items.push({ label: 'Product', active: true }, { label: product.name, active: false });
+      this.breadcrumb.items.push(
+        { label: this.translate.instant("product"), active: true },
+        { label: product.name, active: false }
+      );
     });
 
     // For Demo Purpose only
-    this.route.queryParams.subscribe(params => {
-      if(params['layout']) {
-        this.layout = params['layout'];
+    this.route.queryParams.subscribe((params) => {
+      if (params["layout"]) {
+        this.layout = params["layout"];
       } else {
         // Get Product Layout
-        this.themeOptions$.subscribe(option => {
-          this.layout = option?.product && option?.product?.product_layout ? option?.product?.product_layout : 'product_thumbnail';
+        this.themeOptions$.subscribe((option) => {
+          this.layout =
+            option?.product && option?.product?.product_layout
+              ? option?.product?.product_layout
+              : "product_thumbnail";
         });
       }
     });
   }
 
-  @HostListener('window:scroll', ['$event'])
+  @HostListener("window:scroll", ["$event"])
   onScroll() {
-    const button = document.querySelector('.scroll-button');
+    const button = document.querySelector(".scroll-button");
     if (button) {
       const buttonRect = button.getBoundingClientRect();
       if (buttonRect.bottom < window.innerHeight && buttonRect.bottom < 0) {
         this.isScrollActive = true;
-        document.body.classList.add('stickyCart');
+        document.body.classList.add("stickyCart");
       } else {
         this.isScrollActive = false;
-        document.body.classList.remove('stickyCart');
+        document.body.classList.remove("stickyCart");
       }
     }
   }
 
-  ngOnDestroy(){
-    document.body.classList.remove('stickyCart')
+  ngOnDestroy() {
+    document.body.classList.remove("stickyCart");
   }
-
 }

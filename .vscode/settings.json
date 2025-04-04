@@ -1,0 +1,7 @@
+{
+  "i18n-ally.localesPaths": [
+    "src/locales",
+    "src/app/shared/components/header/widgets/language"
+  ],
+  "i18n-ally.keystyle": "flat"
+}

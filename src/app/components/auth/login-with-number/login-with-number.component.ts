@@ -10,55 +10,67 @@ import * as data from '../../../shared/data/country-code';
 import { LoginWithNumber } from '../../../shared/action/auth.action';
 import { AuthService } from '../../../shared/services/auth.service';
 import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Select2Module } from 'ng-select2-component';
 import { BreadcrumbComponent } from '../../../shared/components/widgets/breadcrumb/breadcrumb.component';
 import { ButtonComponent } from '../../../shared/components/widgets/button/button.component';
 import { AlertComponent } from '../../../shared/components/widgets/alert/alert.component';
 
 @Component({
-    selector: 'app-login-with-number',
-    imports: [CommonModule, TranslateModule, ReactiveFormsModule,
-        Select2Module, RouterModule, BreadcrumbComponent,
-        ButtonComponent, AlertComponent
-    ],
-    templateUrl: './login-with-number.component.html',
-    styleUrl: './login-with-number.component.scss'
+  selector: "app-login-with-number",
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ReactiveFormsModule,
+    Select2Module,
+    RouterModule,
+    BreadcrumbComponent,
+    ButtonComponent,
+    AlertComponent,
+  ],
+  templateUrl: "./login-with-number.component.html",
+  styleUrl: "./login-with-number.component.scss",
 })
 export class LoginWithNumberComponent {
-
-  setting$: Observable<Values> = inject(Store).select(SettingState.setting) as Observable<Values>;
+  setting$: Observable<Values> = inject(Store).select(
+    SettingState.setting
+  ) as Observable<Values>;
 
   public form: FormGroup;
   public codes = data.countryCodes;
 
   public breadcrumb: Breadcrumb = {
-    title: "Login With Number",
-    items: [{ label: 'Login With Number', active: true }]
-  }
+    title: this.translate.instant("login-with-number"),
+    items: [
+      { label: this.translate.instant("login-with-number"), active: true },
+    ],
+  };
 
   constructor(
     private store: Store,
     private router: Router,
     private authService: AuthService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private translate: TranslateService
   ) {
     this.form = this.formBuilder.group({
-      phone: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]*$/)]),
-      country_code: new FormControl('91', [Validators.required]),
-    })
+      phone: new FormControl("", [
+        Validators.required,
+        Validators.pattern(/^[0-9]*$/),
+      ]),
+      country_code: new FormControl("91", [Validators.required]),
+    });
   }
 
-  submit(){
+  submit() {
     this.form.markAllAsTouched();
-    if(this.form.valid){
+    if (this.form.valid) {
       this.store.dispatch(new LoginWithNumber(this.form.value)).subscribe({
         complete: () => {
-          this.authService.otpType = 'number';
-           this.router.navigateByUrl('/auth/otp');
-        }
-      })
+          this.authService.otpType = "number";
+          this.router.navigateByUrl("/auth/otp");
+        },
+      });
     }
   }
-
 }

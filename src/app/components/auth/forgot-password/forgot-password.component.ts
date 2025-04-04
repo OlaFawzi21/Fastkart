@@ -10,46 +10,63 @@ import { Values } from '../../../shared/interface/setting.interface';
 import { ThemeOptionState } from "../../../shared/state/theme-option.state";
 import { Option } from "../../../shared/interface/theme-option.interface";
 import { AuthService } from "../../../shared/services/auth.service";
-import { TranslateModule } from "@ngx-translate/core";
+import { TranslateModule, TranslateService } from "@ngx-translate/core";
 import { CommonModule } from "@angular/common";
 import { BreadcrumbComponent } from "../../../shared/components/widgets/breadcrumb/breadcrumb.component";
 import { AlertComponent } from "../../../shared/components/widgets/alert/alert.component";
 import { ButtonComponent } from "../../../shared/components/widgets/button/button.component";
 
 @Component({
-    selector: 'app-forgot-password',
-    imports: [CommonModule, TranslateModule, ReactiveFormsModule,
-        BreadcrumbComponent, AlertComponent, ButtonComponent
-    ],
-    templateUrl: './forgot-password.component.html',
-    styleUrl: './forgot-password.component.scss'
+  selector: "app-forgot-password",
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ReactiveFormsModule,
+    BreadcrumbComponent,
+    AlertComponent,
+    ButtonComponent,
+  ],
+  templateUrl: "./forgot-password.component.html",
+  styleUrl: "./forgot-password.component.scss",
 })
 export class ForgotPasswordComponent {
-
-  themeOption$: Observable<Option> = inject(Store).select(ThemeOptionState.themeOptions) as Observable<Option>;
-  setting$: Observable<Values> = inject(Store).select(SettingState.setting) as Observable<Values>;
+  themeOption$: Observable<Option> = inject(Store).select(
+    ThemeOptionState.themeOptions
+  ) as Observable<Option>;
+  setting$: Observable<Values> = inject(Store).select(
+    SettingState.setting
+  ) as Observable<Values>;
 
   public form: FormGroup;
   public breadcrumb: Breadcrumb = {
-    title: "Forgot Password",
-    items: [{ label: 'Forgot Password', active: true }]
-  }
+    title: this.translate.instant("forgot_password"),
+    items: [{ label: this.translate.instant("forgot_password"), active: true }],
+  };
   public reCaptcha: boolean = true;
 
-  constructor(private store: Store,
+  constructor(
+    private store: Store,
     public router: Router,
     public authService: AuthService,
-    public formBuilder: FormBuilder ) {
+    public formBuilder: FormBuilder,
+    private translate: TranslateService
+  ) {
     this.form = this.formBuilder.group({
       email: ["", [Validators.required, Validators.email]],
-      recaptcha: ["", [Validators.required]]
+      recaptcha: ["", [Validators.required]],
     });
-    this.setting$.subscribe(setting => {
-      if((setting?.google_reCaptcha && !setting?.google_reCaptcha?.status) || !setting?.google_reCaptcha) {
-        this.form.removeControl('recaptcha');
+    this.setting$.subscribe((setting) => {
+      if (
+        (setting?.google_reCaptcha && !setting?.google_reCaptcha?.status) ||
+        !setting?.google_reCaptcha
+      ) {
+        this.form.removeControl("recaptcha");
         this.reCaptcha = false;
       } else {
-        this.form.setControl('recaptcha', new FormControl(null, Validators.required))
+        this.form.setControl(
+          "recaptcha",
+          new FormControl(null, Validators.required)
+        );
         this.reCaptcha = true;
       }
     });
@@ -57,14 +74,13 @@ export class ForgotPasswordComponent {
 
   submit() {
     this.form.markAllAsTouched();
-    if(this.form.valid) {
+    if (this.form.valid) {
       this.store.dispatch(new ForgotPassWord(this.form.value)).subscribe({
         complete: () => {
-          this.authService.otpType = 'email';
-          this.router.navigateByUrl('/auth/otp');
-        }
+          this.authService.otpType = "email";
+          this.router.navigateByUrl("/auth/otp");
+        },
       });
     }
   }
-
 }

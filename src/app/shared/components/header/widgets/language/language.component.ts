@@ -39,7 +39,7 @@ export class LanguageComponent {
         this.translate.use(language.locale);
       }
     })
-    this.translationLoader.getTranslation();
+    // this.translationLoader.getTranslation();
   }
 
   selectLanguage(language: Language){

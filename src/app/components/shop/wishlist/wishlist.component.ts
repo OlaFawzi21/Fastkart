@@ -13,30 +13,40 @@ import { BreadcrumbComponent } from '../../../shared/components/widgets/breadcru
 import { SkeletonProductBoxComponent } from '../../../shared/components/widgets/product-box/widgets/skeleton-product-box/skeleton-product-box.component';
 import { ProductBoxComponent } from '../../../shared/components/widgets/product-box/product-box.component';
 import { NoDataComponent } from '../../../shared/components/widgets/no-data/no-data.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-    selector: 'app-wishlist',
-    imports: [CommonModule, BreadcrumbComponent, SkeletonProductBoxComponent,
-        ProductBoxComponent, NoDataComponent
-    ],
-    templateUrl: './wishlist.component.html',
-    styleUrl: './wishlist.component.scss'
+  selector: "app-wishlist",
+  imports: [
+    CommonModule,
+    BreadcrumbComponent,
+    SkeletonProductBoxComponent,
+    ProductBoxComponent,
+    NoDataComponent,
+  ],
+  templateUrl: "./wishlist.component.html",
+  styleUrl: "./wishlist.component.scss",
 })
 export class WishlistComponent {
-
-  wishlistItems$: Observable<WishlistModel> = inject(Store).select(WishlistState.wishlistItems);
-  themeOption$: Observable<Option> = inject(Store).select(ThemeOptionState.themeOptions) as Observable<Option>;
+  wishlistItems$: Observable<WishlistModel> = inject(Store).select(
+    WishlistState.wishlistItems
+  );
+  themeOption$: Observable<Option> = inject(Store).select(
+    ThemeOptionState.themeOptions
+  ) as Observable<Option>;
 
   public breadcrumb: Breadcrumb = {
-    title: "Wishlist",
-    items: [{ label: 'Wishlist', active: true }]
-  }
+    title: this.translate.instant("wishlist"),
+    items: [{ label: this.translate.instant("wishlist"), active: true }],
+  };
 
   public skeletonItems = Array.from({ length: 12 }, (_, index) => index);
 
-  constructor(private store: Store,
-    public wishlistService: WishlistService){
-    this.store.dispatch(new GetWishlist())
+  constructor(
+    private store: Store,
+    public wishlistService: WishlistService,
+    private translate: TranslateService
+  ) {
+    this.store.dispatch(new GetWishlist());
   }
-
 }

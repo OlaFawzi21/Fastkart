@@ -4,11 +4,12 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Select2Data, Select2Module, Select2UpdateEvent } from 'ng-select2-component';
 import { Params } from '../../../../../shared/interface/core.interface';
 import { AttributeService } from '../../../../../shared/services/attribute.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-collection-sort',
     imports: [TranslateModule, Select2Module],
-    templateUrl: './collection-sort.component.html',
+templateUrl: './collection-sort.component.html',
     styleUrl: './collection-sort.component.scss'
 })
 export class CollectionSortComponent {
@@ -21,32 +22,32 @@ export class CollectionSortComponent {
 
   public sorting: Select2Data = [{
       value: 'asc',
-      label: 'Ascending Order',
+      label: this.translate.instant('Ascending Order'),
     },{
       value: 'desc',
-      label: 'Descending Order',
+      label: this.translate.instant('Descending Order'),
     },{
       value: 'low-high',
-      label: 'Low - High Price',
+      label: this.translate.instant('Low - High Price'),
     },{
       value: 'high-low',
-      label: 'High - Low Price',
+      label: this.translate.instant('High - Low Price'),
     },{
       value: 'a-z',
-      label: 'A - Z Order',
+      label: this.translate.instant('A - Z Order'),
     },{
       value: 'z-a',
-      label: 'Z - A Order',
+      label: this.translate.instant('Z - A Order'),
     },{
       value: 'discount-high-low',
-      label: '% Off - Hight To Low',
+      label: this.translate.instant('% Off - Hight To Low'),
     }];
 
   public selectedGrid: string = "collection_4_grid";
   public class: string = "row g-sm-4 g-3 row-cols-xl-4 row-cols-md-3 row-cols-2 product-list-section";
   public gridArray = ['collection_3_grid', 'collection_4_grid', 'collection_5_grid', 'collection_list_view'];
 
-  constructor(private route: ActivatedRoute, private attributeService: AttributeService,
+  constructor(private route: ActivatedRoute, private attributeService: AttributeService, private translate :TranslateService,
     private router: Router) {
     this.setGridClass.emit(this.class);
   }

@@ -1,7 +1,8 @@
 @if(style === 'simple' && title){
    <div class="title title-flex-2" [class]="class">
-      <h2>{{ title }}</h2>
-      <ng-content></ng-content>
+      <h2>{{ title | translate }}</h2>
+
+   <ng-content></ng-content>
    </div>
 }@else {
    @if(title){

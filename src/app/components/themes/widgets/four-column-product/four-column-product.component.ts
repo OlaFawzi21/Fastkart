@@ -5,10 +5,11 @@ import { Product, ProductModel } from '../../../../shared/interface/product.inte
 import { SliderProductsTokyo } from '../../../../shared/interface/theme.interface';
 import { ProductState } from '../../../../shared/state/product.state';
 import { ProductComponent } from '../product/product.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-four-column-product',
-    imports: [ProductComponent],
+    imports: [ProductComponent, TranslateModule],
     templateUrl: './four-column-product.component.html',
     styleUrl: './four-column-product.component.scss'
 })
